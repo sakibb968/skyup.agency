@@ -1,37 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Services", href: "/services" },
-  { label: "Case Studies", href: "/portfolio" },
+  { label: "Services", href: "#services" },
+  { label: "Case Studies", href: "#portfolio" },
   { label: "Packages", href: "/packages" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Client Login", href: "/login" },
+  { label: "Client Login", href: "/login", isSpecial: true },
 ];
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Close mobile drawer on escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && mobileOpen) {
-        setMobileOpen(false);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [mobileOpen]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/85 backdrop-blur-md transition-colors duration-200">
+    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/80 backdrop-blur-md transition-colors duration-200">
       <nav
         className="mx-auto flex h-16 max-w-[1100px] items-center justify-between px-6"
         aria-label="Main Navigation"
@@ -44,7 +33,7 @@ export function Navbar() {
         >
           {/* Light mode logo */}
           <Image
-            src="/brand/logo-light.png"
+            src="/brand/logo-light.svg"
             alt="SkyUp Agency"
             width={136}
             height={34}
@@ -53,7 +42,7 @@ export function Navbar() {
           />
           {/* Dark mode logo */}
           <Image
-            src="/brand/logo-dark.png"
+            src="/brand/logo-dark.svg"
             alt="SkyUp Agency"
             width={136}
             height={34}
@@ -63,82 +52,89 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <ul className="hidden items-center gap-7 md:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm px-1 py-0.5"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        {/* Desktop Actions */}
-        <div className="hidden items-center gap-3.5 md:flex">
-          <ThemeToggle />
-          <Link href="/book-call">
-            <button
-              type="button"
-              className="inline-flex h-10 items-center gap-2 rounded-xl bg-accent px-4 text-xs sm:text-sm font-semibold text-accent-foreground transition-all duration-150 hover:bg-accent/90 active:scale-[0.98] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            >
-              <span>Book a Strategy Call</span>
-              <ArrowRight className="size-3.5" />
-            </button>
-          </Link>
-        </div>
-
-        {/* Mobile Hamburger Controls */}
-        <div className="flex items-center gap-2.5 md:hidden">
-          <ThemeToggle />
-          <button
-            type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-menu"
-            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
-            className="flex size-10 items-center justify-center rounded-xl border border-border bg-surface text-foreground hover:bg-surface-raised cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          >
-            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Drawer */}
-      <div
-        id="mobile-menu"
-        aria-hidden={!mobileOpen}
-        className={cn(
-          "overflow-hidden border-t border-border bg-surface/95 backdrop-blur-xl transition-all duration-200 ease-in-out md:hidden",
-          mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
-        )}
-      >
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-1.5 px-6 py-5">
+        <div className="hidden md:flex md:items-center md:gap-7">
           {NAV_LINKS.map((link) => (
             <Link
-              key={link.href}
+              key={link.label}
               href={link.href}
-              className="flex h-11 items-center rounded-lg px-3 text-base font-medium text-foreground hover:bg-surface-raised transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              onClick={() => setMobileOpen(false)}
+              className={`text-sm font-medium transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm ${
+                link.isSpecial ? "text-foreground font-semibold flex items-center gap-1.5" : "text-muted-foreground"
+              }`}
             >
               {link.label}
             </Link>
           ))}
-          <div className="mt-3 border-t border-border pt-4">
-            <Link href="/book-call" onClick={() => setMobileOpen(false)}>
-              <button
-                type="button"
-                className="w-full flex h-11 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-semibold text-accent-foreground"
+        </div>
+
+        {/* Desktop Actions */}
+        <div className="hidden md:flex md:items-center md:gap-3">
+          <ThemeToggle />
+          <Link href="/book-call">
+            <Button size="sm" className="gap-2">
+              <span>Book a Strategy Call</span>
+              <ArrowRight className="size-3.5" />
+            </Button>
+          </Link>
+        </div>
+
+        {/* Mobile Hamburger Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="inline-flex size-9 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Dropdown Panel */}
+      {mobileMenuOpen && (
+        <div className="border-b border-border bg-surface px-6 py-6 md:hidden">
+          <div className="flex flex-col gap-4">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-medium text-foreground hover:text-accent transition-colors"
               >
-                <span>Book a Strategy Call</span>
-                <ArrowRight className="size-4" />
-              </button>
-            </Link>
+                {link.label}
+              </Link>
+            ))}
+            <div className="pt-4 border-t border-border flex flex-col gap-3">
+              <Link
+                href="/book-call"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full"
+              >
+                <Button size="default" className="w-full gap-2">
+                  <span>Book a Strategy Call</span>
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full"
+              >
+                <Button variant="outline" size="default" className="w-full gap-2">
+                  <LogIn className="size-4" />
+                  <span>Client Login</span>
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

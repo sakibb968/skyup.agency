@@ -14,7 +14,7 @@ export default function AuthLayout({
         <div className="mx-auto flex h-16 max-w-[1100px] items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg p-1">
             <Image
-              src="/brand/logo-light.png"
+              src="/brand/logo-light.svg"
               alt="SkyUp Agency"
               width={136}
               height={34}
@@ -22,7 +22,7 @@ export default function AuthLayout({
               className="h-8 w-auto object-contain dark:hidden"
             />
             <Image
-              src="/brand/logo-dark.png"
+              src="/brand/logo-dark.svg"
               alt="SkyUp Agency"
               width={136}
               height={34}
@@ -43,7 +43,7 @@ export default function AuthLayout({
 
       {/* Footer */}
       <footer className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-        <p>© 2026 Skyup Agency. All rights reserved.</p>
+        <p>&copy; 2026 Skyup Agency. All rights reserved.</p>
       </footer>
     </div>
   );
