@@ -33,7 +33,7 @@ export function Navbar() {
         >
           {/* Light mode logo */}
           <Image
-            src="/brand/logo-light.svg"
+            src="/brand/logo-light.png"
             alt="SkyUp Agency"
             width={136}
             height={34}
@@ -42,7 +42,7 @@ export function Navbar() {
           />
           {/* Dark mode logo */}
           <Image
-            src="/brand/logo-dark.svg"
+            src="/brand/logo-dark.png"
             alt="SkyUp Agency"
             width={136}
             height={34}
